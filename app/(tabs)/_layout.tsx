@@ -1,45 +1,101 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { View, Text, Image } from "react-native";
+import React, { useState } from "react";
+import { Tabs } from "expo-router";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const TabsLayout = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+        tabBarActiveTintColor: "#329A35",
+        tabBarStyle: {
+          height: 90,
+          paddingTop: 10,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 0,
+        },
+        tabBarLabelStyle: {
+          fontSize: 14,
+          fontWeight: "500",
+        },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Trang chủ",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("@/assets/images/icon-home.png")}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: focused ? "#329A35" : "#gray", // Màu khi không active
+              }}
+            />
+          ),
+
+          headerShown: false,
+          tabBarLabel: "home",
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="shoppingcart"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "Shopping Cart",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("@/assets/images/icon-gh.png")}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: focused ? "#329A35" : "#gray", // Màu khi không active
+              }}
+            />
+          ),
+          headerShown: false,
+          tabBarLabel: "Giỏ hàng",
+        }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: "History",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("@/assets/images/icon-history.png")}
+              style={{
+                width: 20,
+                height: 20,
+                tintColor: focused ? "#329A35" : "#gray", // Màu khi không active
+              }}
+            />
+          ),
+          headerShown: false,
+          tabBarLabel: "Lịch sử",
+        }}
+      />
+      <Tabs.Screen
+        name="account"
+        options={{
+          title: "Tài khoản",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("@/assets/images/icon-account.png")}
+              style={{
+                width: 18,
+                height: 17,
+                tintColor: focused ? "#329A35" : "#gray", // Màu khi không active
+              }}
+            />
+          ),
+          headerShown: false,
+          tabBarLabel: "Tài khoản",
         }}
       />
     </Tabs>
   );
-}
+};
+
+export default TabsLayout;
