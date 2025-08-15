@@ -11,11 +11,19 @@ const account = () => {
   const singlePress = useSinglePress(1000); // 1000ms chặn click nhanh
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f0fdf4" }}>
+    <SafeAreaView
+      edges={["top", "left", "right"]}
+      style={{ flex: 1, backgroundColor: "#f0fdf4" }}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <HeaderAccount />
         <View className="mx-4 my-[8px] bg-white ">
-          <Pressable className="p-4 flex-row gap-2 items-center ">
+          <Pressable
+            onPress={() =>
+              singlePress(() => router.push("/(tabs)/shoppingcart"))
+            }
+            className="p-4 flex-row gap-2 items-center "
+          >
             <Image
               source={require("@/assets/images/icon-gh.png")}
               style={{ width: 20, height: 20 }}
@@ -24,7 +32,10 @@ const account = () => {
               Giỏ hàng của tôi
             </Text>
           </Pressable>
-          <Pressable className="p-4 flex-row gap-2 items-center ">
+          <Pressable
+            onPress={() => singlePress(() => router.push("/statictisScreen"))}
+            className="p-4 flex-row gap-2 items-center "
+          >
             <Image
               source={require("@/assets/images/icon-tonkho.png")}
               style={{ width: 20, height: 20 }}

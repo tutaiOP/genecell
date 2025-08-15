@@ -3,6 +3,7 @@ import React from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import { useSinglePress } from "@/hooks/useSinglePress";
+import Toast from "react-native-toast-message";
 
 const productData = [
   {
@@ -35,6 +36,20 @@ type Product = {
 const ProductItem = ({ item }: { item: Product }) => {
   const router = useRouter();
   const singlePress = useSinglePress(1000); // 1000ms chặn click nhanh
+  const onAddToCart = () => {
+    Toast.show({
+      type: "cart", // custom type
+      text1: "Đã thêm vào giỏ hàng",
+      props: {
+        onPressViewCart: () => {
+          console.log("Đi đến giỏ hàng");
+          singlePress(() => router.push("/(tabs)/shoppingcart"));
+        },
+      },
+      position: "bottom",
+      visibilityTime: 3000, // 3s tự ẩn
+    });
+  };
   return (
     <Pressable
       onPress={() => singlePress(() => router.push(`/products/${item.id}`))}
@@ -51,7 +66,7 @@ const ProductItem = ({ item }: { item: Product }) => {
           }}
         />
         <Pressable
-          onPress={() => console.log(`Thêm ${item.title} vào giỏ`)}
+          onPress={onAddToCart}
           className="absolute top-4 right-4 w-11 h-11 rounded-full bg-primary items-center justify-center"
         >
           <AntDesign name="plus" size={24} color="white" />

@@ -8,13 +8,15 @@ const HeaderAccount = () => {
   return (
     <>
       <View className="flex-row gap-2 items-center mx-4 mt-2 mb-4">
-        <View>
+        <Pressable
+          onPress={() => singlePress(() => router.push("/personalInfomation"))}
+        >
           <Image
             className="rounded-full aspect-auto"
             source={require("@/assets/images/avatar-ai.jpg")}
             style={{ width: 80, height: 80 }}
           />
-        </View>
+        </Pressable>
         <View className="flex-1">
           <View className="flex-row gap-2 items-center">
             <Text className="text-text font-medium text-lg">

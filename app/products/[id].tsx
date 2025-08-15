@@ -6,16 +6,21 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import ProductList from "@/components/ProductList";
 import ProductRelated from "@/components/ProductRelated";
+import Toast from "react-native-toast-message";
+import ImageViewing from "react-native-image-viewing";
+import { useSinglePress } from "@/hooks/useSinglePress";
+
 const ProductDetail = () => {
   const { id } = useLocalSearchParams(); // Lấy giá trị :id từ URL
   const [expanded, setExpanded] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [viewIndex, setViewIndex] = useState(0);
+  const singlePress = useSinglePress(1000);
   // State cho hình ảnh
   const [images, setImages] = useState([
     require("@/assets/images/shampoo.jpg"),
     require("@/assets/images/image-detail.png"), // main image
-
     require("@/assets/images/image-2.png"),
     require("@/assets/images/image-3.png"),
   ]);
@@ -30,6 +35,22 @@ const ProductDetail = () => {
     setImages(newImages);
   };
 
+  const onAddToCart = () => {
+    Toast.show({
+      type: "cart", // custom type
+      text1: "Đã thêm vào giỏ hàng",
+      props: {
+        onPressViewCart: () => {
+          console.log("Đi đến giỏ hàng");
+          singlePress(() => router.push("/(tabs)/shoppingcart"));
+        },
+      },
+      position: "bottom",
+      bottomOffset: 40,
+      visibilityTime: 3000, // 3s tự ẩn
+    });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f0fdf4" }}>
       <View className="mt-2  flex-row justify-between items-center mx-4">
@@ -39,12 +60,12 @@ const ProductDetail = () => {
         >
           <FontAwesome5 name="arrow-left" size={18} color="white" />
         </Pressable>
-        <View>
+        <Pressable onPress={() => singlePress(() => router.push("/"))}>
           <Image
             source={require("@/assets/images/logo-genecell.png")}
             style={{ width: 81, height: 60 }}
           />
-        </View>
+        </Pressable>
         <View className="w-12 h-12 rounded-full bg-primary-10 items-center justify-center">
           <Image
             source={require("@/assets/images/icon-cart.png")}
@@ -54,12 +75,32 @@ const ProductDetail = () => {
       </View>
       <View className="flex-1 mt-4">
         <ScrollView showsVerticalScrollIndicator={false} className="mx-4">
-          <View className="">
-            <Image
-              className="rounded-[20px]"
-              source={images[0]}
-              style={{ width: "100%", height: 315 }}
-              resizeMode="cover" // Thêm dòng này để hình không bị mờ
+          <View>
+            {/* Ảnh chính */}
+            <Pressable
+              onPress={() => {
+                setViewIndex(0);
+                setVisible(true);
+              }}
+            >
+              <Image
+                className="rounded-[20px]"
+                source={images[0]}
+                style={{ width: "100%", height: 315 }}
+                resizeMode="cover"
+              />
+            </Pressable>
+
+            {/* Fullscreen Image Viewer */}
+            <ImageViewing
+              images={images.map((img) =>
+                typeof img === "number"
+                  ? { uri: Image.resolveAssetSource(img).uri }
+                  : img
+              )}
+              imageIndex={viewIndex}
+              visible={visible}
+              onRequestClose={() => setVisible(false)}
             />
           </View>
           <View className="flex-row justify-between mt-2">
@@ -96,6 +137,15 @@ const ProductDetail = () => {
               VitalSkin Revive 10mL/ 0.33fl
             </Text>
           </View>
+          <View className="flex-row justify-start items-center gap-1">
+            <Text className="text-text text-base font-semibold">
+              500.000
+              <Text className="underline">đ</Text>
+            </Text>
+            <Text className="text-text-secondary line-through text-base font-semibold">
+              850.000 đ..
+            </Text>
+          </View>
           <View className="flex-row gap-2 items-center">
             <View>
               <Text className="text-xs text-text-secondary font-medium">
@@ -107,19 +157,31 @@ const ProductDetail = () => {
               <Text className="text-sm font-medium text-black">5.0</Text>
             </View>
             <View>
-              <Text className="text-sm font-medium text-black">
+              <Text className="text-sm font-medium text-text">
                 Lượt mua: 1000
               </Text>
             </View>
+            <View className="text-sm text-text font-medium">
+              <Text>Số lượng: 50</Text>
+            </View>
           </View>
+
           <View className="my-4 flex-row gap-1 items-center">
-            <Pressable className="py-3 px-[10px] rounded-xl border border-primary">
+            <Pressable
+              onPress={() =>
+                singlePress(() => router.push("/(tabs)/shoppingcart"))
+              }
+              className="py-3 px-[10px] rounded-xl border border-primary"
+            >
               <Image
                 source={require("@/assets/images/icon-gh-g.png")}
                 style={{ width: 18, height: 18 }}
               />
             </Pressable>
-            <Pressable className="flex-1 py-3 bg-primary rounded-xl">
+            <Pressable
+              onPress={onAddToCart}
+              className="flex-1 py-3 bg-primary rounded-xl"
+            >
               <Text className="text-white text-center font-semibold text-base">
                 Đặt mua
               </Text>

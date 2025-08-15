@@ -1,17 +1,20 @@
 import { View, Text, Image, Pressable } from "react-native";
 import React from "react";
-import Button from "../Button";
+import { useSinglePress } from "@/hooks/useSinglePress";
+import { router } from "expo-router";
 
 const Card = () => {
+  const singlePress = useSinglePress(1000);
   return (
     <View>
       <View>
         <Image
-          source={require("@/assets/images/card-empty.png")}
+          source={require("@/assets/images/card-empty1.png")}
           style={{
             width: 400,
-            height: 195,
+            height: 200,
           }}
+          resizeMode="contain"
         />
       </View>
       <View className="my-3">
@@ -23,7 +26,10 @@ const Card = () => {
         </Text>
       </View>
       <View className="flex-row justify-center">
-        <Pressable className="px-4 py-[10px] bg-primary rounded-xl self-start ">
+        <Pressable
+          onPress={() => singlePress(() => router.replace("/(tabs)"))}
+          className="px-4 py-[10px] bg-primary rounded-xl self-start "
+        >
           <Text className="font-semibold text-base text-white  ">Mua hàng</Text>
         </Pressable>
       </View>

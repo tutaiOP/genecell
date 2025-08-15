@@ -6,7 +6,10 @@ import TabsHistory from "@/components/TabsHistory";
 
 const history = () => {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f0fdf4" }}>
+    <SafeAreaView
+      edges={["top", "left", "right"]}
+      style={{ flex: 1, backgroundColor: "#f0fdf4" }}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header />
         <TabsHistory />

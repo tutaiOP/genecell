@@ -1,19 +1,6 @@
-import Feather from "@expo/vector-icons/Feather";
-import {
-  Pressable,
-  Text,
-  StyleSheet,
-  View,
-  Image,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, Image, TouchableOpacity, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Fontisto from "@expo/vector-icons/Fontisto";
 import { ScrollView } from "react-native-gesture-handler";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import ProductList from "@/components/ProductList";
 import { useState } from "react";
 import Header from "@/components/Header";
@@ -29,9 +16,19 @@ export default function Index() {
   const [activeTab, setActiveTab] = useState("Tất cả");
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f0fdf4" }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header />
+    <SafeAreaView
+      edges={["top", "left", "right"]}
+      style={{ flex: 1, backgroundColor: "#f0fdf4" }}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 0 }}
+      >
+        <View style={{ zIndex: 100 }}>
+          {/* Thêm vào View bao ngoài Header */}
+          <Header />
+        </View>
+
         <View>
           <View>
             <Image
@@ -44,19 +41,32 @@ export default function Index() {
           </View>
 
           <View className="mt-3 mb-4 flex-row mx-4">
-            {tabs.map((tab) => (
-              <TouchableOpacity
-                key={tab.id}
-                onPress={() => setActiveTab(tab.label)}
-                className={`px-3 py-[6px] border rounded-lg mr-2 ${
-                  activeTab === tab.label
-                    ? "border-border "
-                    : "border-[#757575]"
-                }`}
-              >
-                <Text className="text-sm text-[#757575]">{tab.label}</Text>
-              </TouchableOpacity>
-            ))}
+            <FlatList
+              data={tabs}
+              keyExtractor={(item) => item.id}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() => setActiveTab(item.label)}
+                  className={`px-3 py-[6px] border rounded-lg mr-2 ${
+                    activeTab === item.label
+                      ? "border-border"
+                      : "border-[#757575]"
+                  }`}
+                >
+                  <Text
+                    className={`text-sm ${
+                      activeTab === item.label
+                        ? "text-border"
+                        : "text-[#757575]"
+                    }`}
+                  >
+                    {item.label}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
           </View>
           <ProductList />
         </View>
